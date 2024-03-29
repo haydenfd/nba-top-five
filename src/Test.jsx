@@ -9,6 +9,9 @@ const names = [
     'Kyrie Irving',
     'Giannis Antetokounmpo'
 ]
+
+const img_url = 'https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/203507.png'
+
 // fake data generator
 const getItems = (count, offset = 0) =>
     Array.from({ length: count }, (v, k) => k).map(k => ({
@@ -44,6 +47,9 @@ const move = (source, destination, droppableSource, droppableDestination) => {
     return result;
 };
 
+const handleSubmitClick = () => {
+    alert("Clicked button")
+}
 
 
 const getItemStyle = (isDragging, draggableStyle) => ({
@@ -176,7 +182,8 @@ export class Test extends Component {
                                                 snapshot.isDragging,
                                                 provided.draggableProps.style
                                             )}>
-                                            {item.content}
+                                            <img src={img_url} width={40} height={50}/>
+                                            <p>{item.content}</p>
                                         </div>
                                     )}
                                 </Draggable>
@@ -216,7 +223,10 @@ export class Test extends Component {
                 </div>
             </DragDropContext>
             <div className='py-12 px-48 w-full flex justify-end items-center'>
-                <Button color="default" className='p-6 text-lg rounded-none border-4 border-black hover:bg-gray-600 hover:text-white '>
+                <Button 
+                className='p-6 text-lg rounded-none border-4 border-black hover:bg-gray-600 hover:text-white'
+                onClick={e => handleSubmitClick()}
+                >
                     Submit
                 </Button>  
             </div>
