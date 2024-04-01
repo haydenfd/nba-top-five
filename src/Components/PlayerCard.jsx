@@ -1,5 +1,3 @@
-import React from 'react'
-
 export const PlayerCard = ({id, name}) => {
 
   const generatePlayerImg = (id) => {
