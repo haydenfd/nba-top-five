@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { Button, Spinner, Modal } from '@nextui-org/react';
+import { Button, Spinner } from '@nextui-org/react';
 import axios from 'axios';
 import { server_url } from '../utils/api';
 import { PlayerCard } from './PlayerCard';
-import {calculateOrderAccuracy} from '../utils/scoring'
+import {countCorrectGuesses} from '../utils/scoring'
+import { ToastContainer, toast, Slide } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const grid = 8;
 const itemHeight = 100; // Adjust this based on your PlayerCard height
@@ -35,10 +38,22 @@ export const Trial = () => {
     const [selected, setSelected] = useState([]);
     const [originalSnapshot, setOriginalSnapshot] = useState([]);
     const [correctOrder, setCorrectOrder] = useState([]);
+    const [attempts, setAttempts] = useState(0);
 
     const handleSubmitClick = () => {
- 
-        alert(`${calculateOrderAccuracy(selected, correctOrder)} %; this is the correct list: ${correctOrder[0].name}, ${correctOrder[1].name}, ${correctOrder[2].name}, ${correctOrder[3].name}, ${correctOrder[4].name}`);
+        if (selected.length !== 5) {
+            SendInvalidSubmissionNotification()
+        }
+
+        else {
+            setAttempts(attempts => attempts + 1)
+            let correctGuesses = countCorrectGuesses(selected, correctOrder, false)
+
+            if (correctGuesses !== 5) {
+                SendCorrectGuessNotification(correctGuesses);
+            }
+            // alert(`${countCorrectGuesses(selected, correctOrder, false)} this is the correct list: ${correctOrder[0].name}, ${correctOrder[1].name}, ${correctOrder[2].name}, ${correctOrder[3].name}, ${correctOrder[4].name}`);
+        }
     };
 
     const handleResetClick = () => {
@@ -71,6 +86,34 @@ export const Trial = () => {
     useEffect(() => {
         fetchData();
     }, []);
+
+    const SendCorrectGuessNotification = (correctGuesses) => {
+        toast(`You have made ${correctGuesses} correct guesses!`, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+            theme: "light",
+            transition: Slide,
+        })
+    }
+
+    const SendInvalidSubmissionNotification = () => {
+        toast(`Rank each player before submitting!`, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+            theme: "light",
+            transition: Slide,
+        })
+    }
 
     const onDragEnd = result => {
         const { source, destination } = result;
@@ -113,8 +156,10 @@ export const Trial = () => {
     }
 
     return (
+        <>
+        <h3 className='text-white font-bold mt-4'>Attempts: {attempts} / 2</h3>
         <div className='w-full flex flex-col items-center space-y-10 mt-10'>
-            <div className='w-[80vw] flex flex-row bg-red-400 justify-between px-4 py-2'>
+            <div className='w-[80vw] flex flex-row justify-between px-4 py-2'>
                 <DragDropContext onDragEnd={onDragEnd}>
                     <div className='font-lg font-bold'>Player List</div>
                     <Droppable droppableId="droppable">
@@ -172,6 +217,8 @@ export const Trial = () => {
                     Submit
                 </Button>
             </div>
+            <ToastContainer />
         </div>
+        </>
     );
 };
