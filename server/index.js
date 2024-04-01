@@ -73,15 +73,26 @@ const processData = (data) => {
     });
   };
   
-  // Example usage with the
-  
+
+  const sortItemsByPPGDesc = (data) => {
+    return data.sort((a, b) => b.PPG - a.PPG);
+};
+
 
 app.get('/', (req, res) => {
 
     const tableName = 'TopFive';
     const numberOfItems = 5;
+
     getRandomItems(tableName, numberOfItems).then(randomItems => {
-        res.send({"data": processData(randomItems)})
+      const processedData = processData(randomItems);
+      const sortedByPPG = sortItemsByPPGDesc([...processedData]); // Create a copy and sort it
+  
+        res.send(
+          {
+            "data": processedData,
+            "correct_order": sortedByPPG,
+          })
 })
    
 })
