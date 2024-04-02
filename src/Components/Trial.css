@@ -1,0 +1,14 @@
+.toastClass {
+  width: 15em;
+  top: 5rem;
+}
+
+.toastBody {
+    font-family: "Effra Medium", sans-serif;
+    color: #10171D; /* #10171D */
+    font-size: 1.25rem;
+  }
+
+  .toastProgress {
+    background: linear-gradient(to right, #007bff, #8a2be2);
+  }

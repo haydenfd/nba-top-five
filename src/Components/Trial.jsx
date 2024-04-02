@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { toastStyles } from './styleUtils';
 import {Breadcrumbs, BreadcrumbItem} from "@nextui-org/react";
+import './Trial.css'
 
 const grid = 8;
 const itemHeight = 100; // Adjust this based on your PlayerCard height
@@ -143,7 +144,11 @@ export const Trial = () => {
     };
     
     if (items === null) {
-        return <Spinner size='lg' label='Loading...' color='primary' className='scale-[200%] mt-[20vh] text-white' />;
+        return <Spinner size='lg' label='Loading...' color='primary' className='mt-[20vh]' 
+        classNames={{
+            base: 'scale-[200%]',
+            label: 'text-white',
+        }}/>;
     }
 
     return (
@@ -254,7 +259,7 @@ export const Trial = () => {
             }
                 
             </div>
-            <ToastContainer />
+            <ToastContainer  className="toastClass" progressClassName="toastProgress" bodyClassName="toastBody"/>
         </div>
         </>
     );
