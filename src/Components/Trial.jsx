@@ -10,7 +10,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { toastStyles } from './styleUtils';
 import {Breadcrumbs, BreadcrumbItem} from "@nextui-org/react";
 import './Trial.css'
+import { SolutionModal } from './Modals/SolutionModal';
 
+  
 const grid = 8;
 const itemHeight = 100; // Adjust this based on your PlayerCard height
 const maxItems = 5;
@@ -42,10 +44,15 @@ export const Trial = () => {
     const [originalSnapshot, setOriginalSnapshot] = useState([]);
     const [correctOrder, setCorrectOrder] = useState([]);
     const [attempts, setAttempts] = useState(0);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+
+    const openModal = () => setModalIsOpen(true);
+    const closeModal = () => setModalIsOpen(false);
 
     const handleSubmitClick = () => {
         if (selected.length !== 5) {
             SendInvalidSubmissionNotification()
+            openModal()
         }
 
         else {
@@ -260,6 +267,7 @@ export const Trial = () => {
                 
             </div>
             <ToastContainer  className="toastClass" progressClassName="toastProgress" bodyClassName="toastBody"/>
+            <SolutionModal isOpen={modalIsOpen} onRequestClose={closeModal} />
         </div>
         </>
     );
