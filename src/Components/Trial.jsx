@@ -4,7 +4,7 @@ import { Button, Spinner } from '@nextui-org/react';
 import axios from 'axios';
 import { server_url } from '../utils/api';
 import { PlayerCard } from './PlayerCard';
-import {countCorrectGuesses} from '../utils/scoring'
+import {compareOrder, countCorrectGuesses} from '../utils/scoring'
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { toastStyles } from './styleUtils';
@@ -46,7 +46,9 @@ export const Trial = () =>
     const [originalSnapshot, setOriginalSnapshot] = useState([]);
     const [correctOrder, setCorrectOrder] = useState([]);
     const [attempts, setAttempts] = useState(0);
+    const [result, setResult] = useState([]);
     const [solutionModalIsOpen, setSolutionModalIsOpen] = useState(false);
+
 
     const openSolutionModal = () => setSolutionModalIsOpen(true);
     const closeSolutionModal = () => setSolutionModalIsOpen(false);
@@ -62,8 +64,12 @@ export const Trial = () =>
         }
 
         let correctGuesses = countCorrectGuesses(selected, correctOrder, false)
+        let evaluated = compareOrder(Array.from(correctOrder), selected);
+        console.log(evaluated)
+        setResult(evaluated)
 
         if (correctGuesses === 5) {
+            
             openSolutionModal() // show that user has finished game
             return;
         }
@@ -75,7 +81,7 @@ export const Trial = () =>
         
         if (attempts === 2) {
             openSolutionModal() // signal end of game
-            console.log('Done')
+            
         }
       }, [attempts]); // This effect depends on `attempts`
       
@@ -281,7 +287,8 @@ export const Trial = () =>
                 
             </div>
             <ToastContainer  className="toastClass" progressClassName="toastProgress" bodyClassName="toastBody"/>
-            <SolutionModal isOpen={solutionModalIsOpen} onRequestClose={closeSolutionModal} />
+           { result.length > 0 ? (<SolutionModal isOpen={solutionModalIsOpen} onRequestClose={closeSolutionModal} result={result}/>) : (<></>)
+           }
         </div>
         </>
     );

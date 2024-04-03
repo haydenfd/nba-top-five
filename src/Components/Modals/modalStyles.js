@@ -8,12 +8,12 @@ export const modalStyle = {
       transform: 'translate(-50%, -50%)',
       border: '3px solid black',
       borderRadius: '16px',
-      maxWidth: '40vw',
+      maxWidth: '30vw',
       width: '90%',
       boxSizing: 'border-box',
       position:'relative',
     },
     overlay: {
-      backgroundColor: 'rgba(0, 0, 0, 0.5)'      
+      backgroundColor: 'rgba(0, 0, 0, 0.85)'      
     },
   };
