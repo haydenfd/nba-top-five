@@ -38,34 +38,56 @@ const getListStyle = isDraggingOver => ({
 });
 
 
-export const Trial = () => {
+export const Trial = () => 
+{
+    
     const [items, setItems] = useState(null);
     const [selected, setSelected] = useState([]);
     const [originalSnapshot, setOriginalSnapshot] = useState([]);
     const [correctOrder, setCorrectOrder] = useState([]);
     const [attempts, setAttempts] = useState(0);
-    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [solutionModalIsOpen, setSolutionModalIsOpen] = useState(false);
 
-    const openModal = () => setModalIsOpen(true);
-    const closeModal = () => setModalIsOpen(false);
+    const openSolutionModal = () => setSolutionModalIsOpen(true);
+    const closeSolutionModal = () => setSolutionModalIsOpen(false);
 
-    const handleSubmitClick = () => {
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+
+        if (attempts === 0) {
+            return;
+        }
+
+        let correctGuesses = countCorrectGuesses(selected, correctOrder, false)
+
+        if (correctGuesses === 5) {
+            openSolutionModal() // show that user has finished game
+            return;
+        }
+
+        if (attempts === 1) {
+            SendCorrectGuessNotification(correctGuesses)
+            return;
+        }
+        
+        if (attempts === 2) {
+            openSolutionModal() // signal end of game
+            console.log('Done')
+        }
+      }, [attempts]); // This effect depends on `attempts`
+      
+      const handleSubmitClick = () => {
         if (selected.length !== 5) {
-            SendInvalidSubmissionNotification()
-            openModal()
+          SendInvalidSubmissionNotification();
+          return;
         }
-
-        else {
-            setAttempts(attempts => attempts + 1)
-            let correctGuesses = countCorrectGuesses(selected, correctOrder, false)
-
-            if (correctGuesses !== 5) {
-                SendCorrectGuessNotification(correctGuesses);
-            }
-            // alert(`${countCorrectGuesses(selected, correctOrder, false)} this is the correct list: ${correctOrder[0].name}, ${correctOrder[1].name}, ${correctOrder[2].name}, ${correctOrder[3].name}, ${correctOrder[4].name}`);
-        }
-    };
-
+      
+        setAttempts(attempts => attempts + 1);
+      };
+      
     const handleResetClick = () => {
         setSelected([]);
         setItems(originalSnapshot);
@@ -93,10 +115,6 @@ export const Trial = () => {
 
     };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
-
     const SendCorrectGuessNotification = (correctGuesses) => {
         toast(`You have made ${correctGuesses} correct ${correctGuesses === 1? 'guess' : 'guesses'}`, 
         toastStyles
@@ -105,10 +123,6 @@ export const Trial = () => {
     const SendInvalidSubmissionNotification = () => {
         toast(`Rank each player before submitting!`, toastStyles
         )}
-
-    const ShowSolutionModal = () => {
-
-    }
 
     const ResetGameState = () => {
 
@@ -240,7 +254,7 @@ export const Trial = () => {
                     <>
                 <Button
                     className='p-6 text-lg rounded-none border-4 border-black hover:bg-gray-600 hover:text-white mr-8'
-                    onClick={ShowSolutionModal}>
+                    onClick={() => setSolutionModalIsOpen(true)}>
                     Show Solution
                 </Button>
                 <Button
@@ -267,7 +281,7 @@ export const Trial = () => {
                 
             </div>
             <ToastContainer  className="toastClass" progressClassName="toastProgress" bodyClassName="toastBody"/>
-            <SolutionModal isOpen={modalIsOpen} onRequestClose={closeModal} />
+            <SolutionModal isOpen={solutionModalIsOpen} onRequestClose={closeSolutionModal} />
         </div>
         </>
     );

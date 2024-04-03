@@ -1,11 +1,11 @@
 import React from 'react'
-import ReactModal from 'react-modal';
-import { Button } from '@nextui-org/react';
+import ReactModal from 'react-modal'
+import { Button } from '@nextui-org/react'
 import { modalStyle } from './modalStyles';
 
 ReactModal.setAppElement('#root');
-
-export const SolutionModal = ({isOpen, onRequestClose}) => {
+  
+export const LandingModal = ({isOpen, onRequestClose}) => {
   return (
 <ReactModal isOpen={isOpen} onRequestClose={onRequestClose} style={modalStyle}>
   <div className="flex flex-col h-full justify-between">
@@ -19,8 +19,6 @@ export const SolutionModal = ({isOpen, onRequestClose}) => {
 
     </div>
   </div>
-</ReactModal>
-
+</ReactModal>    
   )
 }
-
