@@ -24,7 +24,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
     padding: grid,
     // margin: `0 0 ${grid}px 0`,
     margin: `0 0 4px 0`,
-    background: isDragging ? 'lightgreen' : 'white',
+    background: isDragging ? '#9370DB' : 'white',
     border: "2px solid black",
     ...draggableStyle,
 });
@@ -130,8 +130,13 @@ export const Trial = () =>
         toast(`Rank each player before submitting!`, toastStyles
         )}
 
-    const ResetGameState = () => {
+    const ResetGameState = async () => {
 
+        setAttempts(0)
+        setCorrectOrder([])
+        setSelected([])
+        setItems(null)
+        await fetchData()
     }
 
     const onDragEnd = result => {
@@ -180,7 +185,7 @@ export const Trial = () =>
 
     return (
         <>
-        <h3 className='text-blue-600 font-bold mt-4'>Attempts: {attempts} / 2</h3>
+        <h3 className={`${attempts === 2? "text-red-400" : "text-blue-600"} font-bold mt-4`}>Attempts: {attempts} / 2</h3>
         <div className='w-full flex flex-col items-center space-y-10 mt-10'>
  {/* might need to fix here*/}
             <div className='w-2/3 flex flex-row justify-around px-4 py-2'>
@@ -198,6 +203,7 @@ export const Trial = () =>
                                                     ref={provided.innerRef}
                                                     {...provided.draggableProps}
                                                     {...provided.dragHandleProps}
+                                                    className={`${attempts === 2? "pointer-events-none bg-gray-400" : "pointer-events-auto"}`}
                                                     style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}>
                                                     <PlayerCard name={item.name} id={item.id} />
                                                 </div>
@@ -222,6 +228,7 @@ export const Trial = () =>
                                                 ref={provided.innerRef}
                                                 {...provided.draggableProps}
                                                 {...provided.dragHandleProps}
+                                                className={`${attempts === 2? "pointer-events-none" : "pointer-events-auto"}`}
                                                 style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}>
                                                 <PlayerCard name={item.name} id={item.id} />
                                             </div>

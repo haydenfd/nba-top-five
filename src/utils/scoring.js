@@ -1,11 +1,13 @@
 export function countCorrectGuesses(selected, correctOrder, returnAccuracy) {
 
   let correctCount = 0;
-    
+
     // Assume both lists are of the same length. If not, you may need additional checks.
     for (let i = 0; i < selected.length; i++) {
+      console.log(`Comparing ${selected[i].name} with ${correctOrder[i].name}`)
       if (selected[i].id === correctOrder[i].id) {
         correctCount += 1;
+        console.log(selected[i].name)
       }
     }
     
